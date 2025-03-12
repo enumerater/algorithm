@@ -1,4 +1,4 @@
-# 算法项目
+算法项目
 
 ## 介绍
 记录刷题等。
@@ -198,7 +198,7 @@ while hp:
 print(*res[1:])
 ```
 
-Floyd B3647 【模板】Floyd
+2Floyd B3647 【模板】Floyd
 
 ```python
 from math import inf
@@ -224,7 +224,7 @@ for i in range(1,n + 1):
     print()
 ```
 
-bellman-ford 
+3bellman-ford 
 
 ```python
 from math import inf
@@ -268,9 +268,86 @@ for _ in range(T):
     print("Yes" if has_negative_cycle else "No")
 ```
 
-spfa
+4spfa
 
+```python
+from collections import deque
+from math import inf
+
+def spfa(n, edges):
+    dis = [inf] * (n + 1)
+    in_queue = [False] * (n + 1)
+    count = [0] * (n + 1)
+    dis[1] = 0
+    queue = deque([1])
+    in_queue[1] = True
+
+    while queue:
+        u = queue.popleft()
+        in_queue[u] = False
+        for v, w in edges[u]:
+            if dis[v] > dis[u] + w:
+                dis[v] = dis[u] + w
+                count[v] += 1
+                if count[v] >= n:
+                    return True
+                if not in_queue[v]:
+                    queue.append(v)
+                    in_queue[v] = True
+    return False
+
+T = int(input())
+for _ in range(T):
+    n, m = map(int, input().split())
+    edges = [[] for _ in range(n + 1)]
+    for _ in range(m):
+        u, v, w = map(int, input().split())
+        edges[u].append((v, w))
+        if w >= 0:
+            edges[v].append((u, w))
+    if spfa(n, edges):
+        print("Yes")
+    else:
+        print("No")
 ```
 
+# 二分
+
+P2249
+
+```python
+import bisect
+
+n, m = map(int, input().split())
+arr = list(map(int, input().split()))
+qs = list(map(int, input().split()))
+
+for q in qs:
+    index = bisect.bisect_left(arr, q)
+    if index < n and arr[index] == q:
+        print(index + 1, end=' ')
+    else:
+        print(-1, end=' ')
 ```
+
+```python
+#p1102
+from bisect import bisect_left,bisect_right,bisect
+
+N,C = [int(i) for i in input().split()] 
+
+li = [int(i) for i in input().split()]
+li.sort()
+res = 0
+for B in li:
+    A = B + C
+    index_left = bisect_left(li,A)
+    index_right = bisect_right(li,A)
+    res += index_right - index_left
+print(res)
+```
+
+
+
+# 线段树
 

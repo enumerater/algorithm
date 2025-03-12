@@ -7,6 +7,8 @@ for _ in range(T):
     for _ in range(m):
         u, v, w = map(int, input().split())
         ed[u].append((v, w))
+        if w >= 0:
+            ed[v].append((u, w))
     
     dis = [inf] * (n + 1)
     dis[1] = 0  # 假设源节点是1
@@ -36,4 +38,4 @@ for _ in range(T):
         if has_negative_cycle:
             break
 
-    print("Yes" if has_negative_cycle else "No")
+    print("YES" if has_negative_cycle else "NO")
