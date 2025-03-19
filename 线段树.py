@@ -12,15 +12,15 @@ class SegmentTree:
         for i in range(self.n - 1, 0, -1):
             self.tree[i] = self.tree[i * 2] + self.tree[i * 2 + 1]
 
-    def update(self, index, value):
-        # Update the leaf node
-        pos = index + self.n
+    def update(self, pos, value):
+        # Update the value at the leaf node
+        pos += self.n
         self.tree[pos] = value
         # Update the internal nodes
         while pos > 1:
             pos //= 2
             self.tree[pos] = self.tree[2 * pos] + self.tree[2 * pos + 1]
-                                                                                                              
+
     def query(self, left, right):
         # Query the sum in the range [left, right)
         result = 0
@@ -38,8 +38,8 @@ class SegmentTree:
         return result
 
 # Example usage:
-data = [1, 2, 3, 4, 5, 6, 7, 8]
-seg_tree = SegmentTree(data)
-print(seg_tree.query(0, 4))  # Output: 10 (1+2+3+4)
-seg_tree.update(3, 10)
-print(seg_tree.query(0, 4))  # Output: 16 (1+2+3+10)
+# data = [1, 2, 3, 4, 5]
+# seg_tree = SegmentTree(data)
+# print(seg_tree.query(1, 3))  # Output: 5 (2 + 3)
+# seg_tree.update(1, 10)
+# print(seg_tree.query(1, 3))  # Output: 13 (10 + 3)

@@ -351,3 +351,141 @@ print(res)
 
 # 线段树
 
+
+# 强连通分量
+B3609 [图论与代数结构 701] 强连通分量
+```python
+import sys
+sys.setrecursionlimit(9999)
+n,m = [int(i) for i in input().split()]
+ed = [[] for i in range(n + 1)]
+rev = [[] for i in range(n + 1)]
+for _ in range(m):
+    u,v = [int(i) for i in input().split()]
+    ed[u].append(v)
+    rev[v].append(u)
+
+vis = [0] * (n + 1)
+stack = []
+def dfs1(x):
+    vis[x] = 1
+    for i in ed[x]:
+        if not vis[i]:
+            dfs1(i)
+    stack.append(x)
+def dfs2(x, y):
+    vis[x] = 1
+    f[x] = y
+    for i in rev[x]:
+        if not vis[i]:
+            dfs2(i, y)
+for i in range(1, n + 1):
+    if not vis[i]:
+        dfs1(i)
+f = [0] * (n + 1)
+vis = [0] * (n + 1)
+while stack:
+    x = stack.pop()
+    if not vis[x]:
+        dfs2(x, x)
+res = len(set(f[1:n + 1]))
+print(res)
+components = {}
+for i in range(1, n + 1):
+    if f[i] not in components:
+        components[f[i]] = []
+    components[f[i]].append(i)
+
+for key in components:
+    print(*components[key])
+```
+
+# 递推
+P1990 覆盖墙壁
+
+![image-20250319141830258](C:\Users\enumerate\AppData\Roaming\Typora\typora-user-images\image-20250319141830258.png)
+
+推导：
+
+![image-20250319143149035](C:\Users\enumerate\AppData\Roaming\Typora\typora-user-images\image-20250319143149035.png)
+
+```python
+n = int(input())
+f = [0] * (n + 1)
+g = [0] * (n + 1)
+f[0] = 1
+f[1] = 1
+g[1] = 1
+for i in range(2, n + 1):
+    f[i] = f[i - 1]%10000 + f[i - 2]%10000 + 2*g[i - 2]%10000
+    g[i] = f[i-1]%10000 + g[i - 1]%10000
+print(f[n]%10000)
+```
+
+# 背包问题
+P1216 [IOI 1994] 数字三角形 Number Triangles
+```python
+r = int(input())
+ta = [[] for _ in range(r)]
+for i in range(r):
+    ta[i] = list(map(int, input().split()))
+
+for i in range(1, r):
+    for j in range(i + 1):
+        if j == 0:
+            ta[i][j] += ta[i-1][0]
+        elif j == i:
+            ta[i][j] += ta[i-1][j-1]
+        else:
+            ta[i][j] += max(ta[i-1][j-1], ta[i-1][j])
+print(max(ta[-1]))
+```
+
+P1048	[NOIP 2005 普及组] 采药(经典背包)
+```python
+t,m = [int(i) for i in input().split()]
+li = [[0,0] for i in range(m + 1)]
+for i in range(1,m + 1):
+    li[i] = [int(i) for i in input().split()]
+res = [[0 for i in range(t + 1)] for j in range(m + 1)]
+for i in range(1,m + 1):
+    for j in range(1,t + 1):
+        if j >= li[i][0]:
+            res[i][j] = max(res[i - 1][j],res[i - 1][j - li[i][0]] + li[i][1])
+        else:
+            res[i][j] = res[i - 1][j]
+print(res[m][t])
+
+# 化简一维/反向遍历背包空间/正向遍历是无限背包（某件物品无限拿）
+t,m = [int(i) for i in input().split()]
+li = [[0,0] for i in range(m + 1)]
+for i in range(1,m + 1):
+    li[i] = [int(i) for i in input().split()]
+res = [0 for j in range(t + 1)]
+for i in range(1,m + 1):
+    for j in range(t,0,-1):
+        if j >= li[i][0]:
+            res[j] = max(res[j],res[j - li[i][0]] + li[i][1])
+        else:
+            res[j] = res[j]
+print(res[t])
+```
+
+
+P1164 小A点菜
+```python
+N,M = [int(i) for i in input().split()]
+li = [0] + [int(i) for i in input().split()]
+
+dp = [[0 for i in range(M+1)] for j in range(N+1)]
+
+for i in range(N+1):
+    dp[i][0] = 1
+    
+for i in range(1,N+1):
+    for j in range(1,M+1):
+        if j >= li[i]:
+            dp[i][j] += dp[i-1][j-li[i]]
+        dp[i][j] += dp[i-1][j]
+print(dp[N][M])
+```
